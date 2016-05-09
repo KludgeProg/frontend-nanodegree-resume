@@ -86,12 +86,92 @@ var education = {
 var projects = {}
 projects.project = [
 	{
-		"title" : "Sample Project 1",
-		"date" : "2007-2008",
+		title : "Sample Project 1",
+		date : "2007-2008",
 		"description" : "Doing some stuff to check out what is this about.",
 		"images" : ["images/life.jpg", "images/fry.jpg", "images/197x148.gif"]
 	}
 ]
+
+// Display Data on Web
+displayWork();
+
+
+
+
+
+// FUNCTIONS AND MORE
+function inName(string) {
+	separated = string.split(" ");
+	separated[1] = separated[1].toUpperCase();
+	separated[0] = separated[0].slice(0,1).toUpperCase() + separated[0].slice(1).toLowerCase();
+	return separated[0] + " " + separated[1];
+}
+
+function locationizer(work_obj) {
+    locations = [];
+    for (elements in work_obj.jobs) {
+        if (work_obj.jobs[elements].location != undefined) {
+            locations.push(work_obj.jobs[elements].location);
+        }
+    }
+    return locations;
+}
+
+$(document).click(function(loc) { 
+	//your code here
+	x = loc.pageX;
+	y = loc.pageY;
+	logClicks(x,y);
+});
+
+function displayWork() {
+	// NAME, ROLE AND PICTURE FORMAT
+	$("#header").prepend(HTMLheaderRole.replace("%data%", bio.role));
+	$("#header").prepend(HTMLheaderName.replace("%data%", bio.name));
+	$("#header").append(HTMLbioPic.replace("%data%", bio.bioPic))
+	$("#header").append(HTMLwelcomeMsg.replace("%data%", bio.welcome_message))
+
+	// CONTACT FORMAT
+	contact_keys = Object.keys(bio.contact_info);
+	for (var i = contact_keys.length - 1; i >= 0; i--) {
+		format = window[('HTML' + contact_keys[i])];
+		if (format) {	
+			format = format.replace("%contact%", contact_keys[i]).replace("%data%", bio.contact_info[contact_keys[i]]);
+		}
+		$("#topContacts").prepend(format);	
+	}
+
+	// WORK FORMAT
+	for (works in work.jobs) {
+		$("#workExperience").append(HTMLworkStart);
+		formatEmployer = HTMLworkEmployer.replace("%data%", work.jobs[works].employer);
+		formatTitle = HTMLworkTitle.replace("%data%", work.jobs[works].title);
+		formatDate = HTMLworkDates.replace("%data%", work.jobs[works].dates);
+		formatLocation = HTMLworkLocation.replace("%data%", work.jobs[works].location);
+		formatDescription = HTMLworkDescription.replace("%data%", work.jobs[works].description);
+		
+		$(".work-entry:last").append(formatEmployer + formatTitle, formatDate, formatLocation, formatDescription);
+	}
+
+	// SKILLS FORMAT
+	var formattedSkills = [
+	 	HTMLskills.replace("%data%", bio.skills[0]),
+	 	HTMLskills.replace("%data%", bio.skills[1]),
+	 	HTMLskills.replace("%data%", bio.skills[2])
+	]
+
+	$("#header").append(HTMLskillsStart);
+
+	if (bio.skills.length > 0) {
+		$("#skills").prepend(formattedSkills);
+	}
+
+	// INTERNATIONALIZE BUTTON
+	$('#main').append(internationalizeButton);
+}
+
+
 
 
 // $("#header").append("Abstract Resolution!!");
@@ -117,27 +197,20 @@ projects.project = [
 
 
 
-projects["property[]"] = "test";
+// projects["property[]"] = "test";
 // projects.8property = "test";
 
-$("#main").append(Object.keys(education.schools[0])[0], ": ", education.schools[0].name, "<br>");
-$("#main").append(projects["property[]"]);
+// $("#main").append(Object.keys(education.schools[0])[0], ": ", education.schools[0].name, "<br>");
+// $("#main").append(projects["property[]"]);
 
-// contact_info_keys = Object.keys(bio["contact_info"]);
+
 // keys_len = contact_info_keys.length;
 
 
 // var html_format = {
 // 	"formattedName" : HTMLheaderName.replace("%data%", bio.name),
 // 	"formattedRole"	: HTMLheaderRole.replace("%data%", bio.role),
-// 	"formattedGithub" : HTMLgithub.replace("%contact%", contact_info_keys[keys_len-1]).replace("%data%", bio.contact_info[contact_info_keys[keys_len-1]]), 
-// 	"formattedEmail" : HTMLemail.replace("%contact%", contact_info_keys[keys_len-2]).replace("%data%", bio.contact_info[contact_info_keys[keys_len-2]]),
-// 	"formattedMobile" : HTMLmobile.replace("%contact%", contact_info_keys[keys_len-3]).replace("%data%", bio.contact_info[contact_info_keys[keys_len-3]]),
-// 	"formattedPicture" : HTMLbioPic.replace("%data%", bio.picture_url),
-// 	"formattedMessage" : HTMLwelcomeMsg.replace("%data%", bio.welcome_message),
-// 	"formattedSkills1" : HTMLskills.replace("%data%", bio.skills1),
-// 	"formattedSkills2" : HTMLskills.replace("%data%", bio.skills2),
-// 	"formattedSkills3" : HTMLskills.replace("%data%", bio.skills3)
+	
 // }
 
 
